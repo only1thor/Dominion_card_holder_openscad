@@ -1,11 +1,16 @@
-// Define the dimensions of the card
-card_width = 60;
-card_height = 25;//91;
-
+// How tall the card holder should be.
+card_holder_height = 25;//91;
+// The distance each deck is offset from the ones next to it.
 card_stack_offset = 10;
+// Thickness of the walls. (i used the Fast setting on my slicer, it test the extrusion width to 0.2mm)
+wall_thickness = 0.2;
+// The thickness of the decks you want to store.
+deck_sizes = [10,20,13.5,11];
 
-//(w,d,h)
-//(x,y,z)
+// variables below this module will not be rendered for user manipulation
+module __Customizer_Limit__ () {}
+card_width = 60;
+
 
 function sum_list(list, index = 0, total = 0) = 
     index < len(list) ? 
@@ -16,7 +21,7 @@ function partial_list(sub_list,start,end) =
 	end == -1 ? [sub_list[0]] : [for (i = [start:end]) sub_list[i]];
 
 module card_stack_body(stack_thickness,card_pluss_wall_width) {
-    cube([card_pluss_wall_width, stack_thickness, card_height]);
+    cube([card_pluss_wall_width, stack_thickness, card_holder_height]);
 }
 
 module cards_spaced(list_of_deck_thicknesses,wall_width){
@@ -44,8 +49,8 @@ module cards_spaced(list_of_deck_thicknesses,wall_width){
 	stack_length= sum_list(list) + wall_width*(len(list)-1)*3;
 	center_offset = card_width/2 + card_stack_offset/2 - card_width/8;
 	translate([center_offset, 0, 0]){
-		cube([card_width/4,stack_length,card_height]);
+		cube([card_width/4,stack_length,card_holder_height]);
 	}
 }
 
-cards_spaced([10,20,13.5,11],0.35);
+cards_spaced(deck_sizes,wall_thickness);
