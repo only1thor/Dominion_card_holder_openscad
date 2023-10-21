@@ -1,34 +1,36 @@
 // Define the dimensions of the card
 card_width = 59;
 card_length = 91;
-card_thickness = 1;
 
-// Define the dimensions of the card's face
-face_width = 51;
-face_length = 83;
-face_thickness = (card_thickness/4);
 
-letter_size = 10;
+//(w,d,h)
+//(x,y,z)
 
-module card_body() {
-    cube([card_width, card_length, card_thickness]);
+function sum_list(list, index = 0, total = 0) = 
+    index < len(list) ? 
+    sum_list(list, index + 1, total + list[index]) : 
+    total;
+
+function partial_list(list,start,end) = [for (i = [start:end]) list[i]];
+
+module card_stack_body(card_thickness) {
+    cube([card_width, card_thickness, card_length]);
 }
 
-module card_face() {
-    translate([(card_width - face_width) / 2, (card_length - face_length) / 2, (face_thickness*3.01)])
-        cube([face_width, face_length, face_thickness]);
+module cards_spaced(list){
+	number = len(list);
+    for ( i = [0:number-1]){
+		echo("Partial: ", partial_list(list,0,i-1));
+		echo("Sum of partial: ",sum_list(partial_list(list,0,i-1)));
+        if (i % 2 == 0) {
+            translate([0, (sum_list(partial_list(list,0,i-1)))+2*i,0]){
+                card_stack_body(list[i]);
+            }
+        } else {
+            translate([5, (sum_list(partial_list(list,0,i-1)))+2*i,0]){
+                card_stack_body(list[i]);
+            }
+        }
+    }
 }
-
-module card_text(in_text){
-	translate([card_width/2, card_length/2, card_thickness])
-	linear_extrude(height = 1)
-	rotate(45)
-	text(in_text, font = "Arial:style=Bold", size = letter_size, halign = "center", valign = "center");
-}
-
-difference() {
-    card_body();
-    card_face();
-}
-
-card_text("Dominion");
+cards_spaced([4,1,8,2,9,4,6,10,2,21]);

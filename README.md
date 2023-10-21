@@ -8,3 +8,8 @@ for example i want to use the 0.2mm FAST setting on my 3D-printer, i would set t
 this is a quick preview of what i have generated for myself:
 
 ![Dominion Card](./card.png)
+
+And now theres even a staggered stack of decks!
+
+
+![stack of cards staggered](./staggered_stack.png)
