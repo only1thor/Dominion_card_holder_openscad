@@ -3,6 +3,22 @@ This is a card holder thas is meant to be printed in vase mode for fast printing
 
 It is parametric, so fill out the parameters for your decks, and run a render in OpenSCAD to get an STL file for printing!
 
+## Pictures!
+
+This is a quick preview of what i have generated for myself, with these settings:
+```openscad
+deck_sizes = [12,22,15];
+deck_names = ["Rando","Copper","Silver"];
+wall_thickness = 0.2;
+card_stack_offset = 20;
+enable_text = true;
+card_holder_height = 50;
+card_width = 61;
+```
+|   |   |
+|---|---|
+|![Dominion playingcards stored in a printed version of the model](./img/card_holder.jpeg)|![Rendered model of card decks staggered](./img/card_holder.png)| 
+
 ## Parameters explained
 The Main parameter you need to fill is the `deck_sizes`, and probably `wall_thickness`. Other parameters are optional as they are set to values that seem to work well with a "standard" card size.
 
@@ -61,18 +77,3 @@ This is how tall you want the card holder to be. You can initially set it to a l
 This is only relevant if you have cards that are not standard size, or are planning to stare sleved cards. 
 It is for the with of the card, that is; the shorter lenght of the card. 
 
-## Pictures!
-
-This is a quick preview of what i have generated for myself, with these settings:
-```openscad
-deck_sizes = [12,22,15];
-deck_names = ["Rando","Copper","Silver"];
-wall_thickness = 0.2;
-card_stack_offset = 20;
-enable_text = true;
-card_holder_height = 50;
-card_width = 61;
-```
-|   |   |
-|---|---|
-|![Dominion playingcards stored in a printed version of the model](./img/card_holder.jpeg)|![Rendered model of card decks staggered](./img/card_holder.png)| 
