@@ -45,7 +45,7 @@ Here are a cople examples:
 |   |   |
 |---|---|
 |Non staggered (`card_stack_offset = 0`) | Staggered 20mm (`card_stack_offset=20`) |
-|![card holder without staggering](./non_staggered.jpeg) | ![card holder with 20mm staggering](./20mm_staggered.jpeg) |
+|![card holder without staggering](./img/non_staggered.jpeg) | ![card holder with 20mm staggering](./img/20mm_staggered.jpeg) |
 
 ### `enable_text`
 This is default set to `false`, but you should set it to `true` before you export the STL. Also save any changes before changing this to `true`. 
@@ -75,4 +75,4 @@ card_width = 61;
 ```
 |   |   |
 |---|---|
-|![Dominion playingcards stored in a printed version of the model](./card_holder.jpeg)|![Rendered model of card decks staggered](./card_holder.png)| 
+|![Dominion playingcards stored in a printed version of the model](./img/card_holder.jpeg)|![Rendered model of card decks staggered](./img/card_holder.png)| 
