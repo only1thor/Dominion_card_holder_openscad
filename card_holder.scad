@@ -1,37 +1,41 @@
-// How tall the card holder should be. set to a bit less than the height of the cards so they leave a bit to be grabbed.
-card_holder_height = 50;//91;
+// The thickness of the decks you want to store. (I find that number of cards *0.35 gives a stug fit, add an additional 1 or 2 for a slightly looser fit)
+deck_sizes = [12,22,15];
+// Names of the decks, to be embossed on the side. (To skip naming a deck name it: "")
+deck_names = ["Rando","Copper","Silver"];
+// Thickness of the walls. (I used the "0.20mm SPEED" setting on my slicer, so i set the wall thickness to 0.2)
+wall_thickness = 0.2;
 // The distance each deck is offset from the ones next to it. This is the staggering that makes it easier to grab the corner of a deck.
 card_stack_offset = 20;
-// Thickness of the walls. (i used the Fast setting on my slicer, it test the extrusion width to 0.2mm)
-wall_thickness = 0.2;
-// The thickness of the decks you want to store.
-deck_sizes = [12,22,15];
-// Names of the decks, to be embossed on the side.
-deck_names = ["Rando","Copper","Silver"];
-
 // enable beveled text allowing for text in vase mode print. requires heavy readering, enable when preview looks right.
 enable_text = false;
+// How tall the card holder should be. set to a bit less than the height of the cards so they leave a bit to be grabbed.
+card_holder_height = 50;
 
-// The width of the card (shortest lenght). If you have sleaved cards, you may want to increase this.
+// The width of the card (shortest lenght). If you have sleaved cards, or cards with non standard sizes, you may want to increase this.
 card_width = 61;
 
-
+// helper function to get the length of all decks stacked
 function sum_list(list, index = 0, total = 0) = 
     index < len(list) ? 
     sum_list(list, index + 1, total + list[index]) : 
     total;
 
+// helper function to get a portion of the entire list of decks
 function partial_list(sub_list,start,end) = 
 	end == -1 ? [sub_list[0]] : [for (i = [start:end]) sub_list[i]];
 
+// module to create a deck
 module card_stack_body(stack_thickness,card_pluss_wall_width) {
     cube([card_pluss_wall_width, stack_thickness, card_holder_height]);
 }
 
+// module to create text on the side of a deck
 module card_text(stack_name,thickness,placement_x_y){
 	font_size = thickness > 10 ? 10: thickness;
+	color("lightblue")
 	translate([placement_x_y[0], placement_x_y[1], 2])
 	rotate([90,-90,-90])
+	// minkowski is really tought to run, so enable it only when ready for final render.
 	if (enable_text){
        minkowski(){
 		linear_extrude(height = 0.1)
@@ -45,18 +49,18 @@ module card_text(stack_name,thickness,placement_x_y){
 	}
 }
 
-
+// module to generate the model.
 module cards_spaced(list_of_deck_thicknesses,names,wall_width){
+	// create a list of deck thicknesses that account for wall thickness
 	list = [for (i = list_of_deck_thicknesses) i+(wall_width*2) ];
 	number = len(list);
     for ( i = [0:number-1]){
+		// First run should not get partial list. since i=0, and 0-1 is out of bounds of the list.
 		if ( i == 0 ) {
 				card_stack_body(list[i],card_width+wall_width*2);
 				card_text(names[0],list[i]-2,[0,list[i]/2]);
 		}	
 		else {
-			echo("Partial: ", partial_list(list,0,i-1));
-			echo("Sum of partial: ",sum_list(partial_list(list,0,i-1)));
 			if (i % 2 == 0) {
 				translate([0, (sum_list(partial_list(list,0,i-1)))+wall_width*3*i,0]){
 					card_stack_body(list[i],card_width+wall_width*2);
@@ -78,4 +82,5 @@ module cards_spaced(list_of_deck_thicknesses,names,wall_width){
 	}
 }
 
+// Use the module to actually gererate the model. 
 cards_spaced(deck_sizes,deck_names,wall_thickness);
