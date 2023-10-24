@@ -1,14 +1,13 @@
 // The thickness of the decks you want to store. (I find that number of cards *0.35 gives a stug fit, add an additional 1 or 2 for a slightly looser fit)
-deck_card_count = [60,40,30,24,12,12,30,7];
-deck_sizes = [for (i = deck_card_count) round(i*0.35+1.4)];
+deck_sizes = [12,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4];
 // Names of the decks, to be embossed on the side. (To skip naming a deck name it: "")
-deck_names = ["Copper","Silver", "Gold", "Estate", "Duchy", "Province", "Curse","Blank"];
+deck_names = ["Randomizers","Adventurer", "Bureaucrat", "Cellar", "Chancellor", "Chapel", "Council Room", "Feast", "Festival", "Gardens", "Laboratory", "Library", "Market", "Militia", "Mine", "Moat", "Moneylender", "Remodel", "Smithy", "Spy", "Thief", "Throne Room", "Village", "Witch", "Woodcutter", "Workshop"];
 // Thickness of the walls. (I used the "0.20mm SPEED" setting on my slicer, so i set the wall thickness to 0.2)
 wall_thickness = 0.2;
 // The distance each deck is offset from the ones next to it. This is the staggering that makes it easier to grab the corner of a deck.
 card_stack_offset = 20;
 // enable beveled text allowing for text in vase mode print. requires heavy readering, enable when preview looks right.
-enable_text = true;
+enable_text = false;
 // How tall the card holder should be. set to a bit less than the height of the cards so they leave a bit to be grabbed.
 card_holder_height = 50;
 
@@ -31,22 +30,37 @@ module card_stack_body(stack_thickness,card_pluss_wall_width) {
 }
 
 // module to create text on the side of a deck
-module card_text(stack_name,thickness,placement_x_y){
-	font_size = thickness > 10 ? 10: thickness;
+module card_text(stack_name,thickness_deck,placement_x_y){
+	font_size = thickness_deck > 5 ? 5: thickness_deck;
 	color("lightblue")
-	translate([placement_x_y[0], placement_x_y[1], 2])
+	translate([placement_x_y[0]+0.25, placement_x_y[1], 3])
 	rotate([90,-90,-90])
 	// minkowski is really tought to run, so enable it only when ready for final render.
 	if (enable_text){
        minkowski(){
 		linear_extrude(height = 0.1)
-		text(stack_name, font = "Arial:style=Bold", size = font_size, halign = "left", valign = "center");
-		cylinder(h =0.5, r1=0.25,r2=0.01);
+		text(stack_name, font = "Source Sans 3:style=ExtraLight", size = font_size, halign = "left", valign = "center");
+		cylinder(h =0.5, r1=0.45,r2=0.05);
 	   }
 	}
 	else {
 		linear_extrude(height = 1)
-		text(stack_name, font = "Arial:style=Bold", size = font_size, halign = "left", valign = "center");
+		text(stack_name, font = "Source Sans 3:style=ExtraLight", size = font_size, halign = "left", valign = "center");
+	}
+	color("lightblue")
+	translate([placement_x_y[0]+card_width+wall_thickness, placement_x_y[1], 3])
+	rotate([90,-90,90])
+	// minkowski is really tought to run, so enable it only when ready for final render.
+	if (enable_text){
+       minkowski(){
+		linear_extrude(height = 0.1)
+		text(stack_name, font = "Source Sans 3:style=ExtraLight", size = font_size, halign = "left", valign = "center");
+		cylinder(h =0.5, r1=0.45,r2=0.05);
+	   }
+	}
+	else {
+		linear_extrude(height = 1)
+		text(stack_name, font = "Source Sans 3:style=ExtraLight", size = font_size, halign = "left", valign = "center");
 	}
 }
 
